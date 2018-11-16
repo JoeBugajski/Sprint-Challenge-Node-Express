@@ -31,6 +31,21 @@ router.get('/:id', (req, res) => {
     })
 });
 
+router.get('/:id/actions', (req, res) => {
+  const id = req.params.id;
+  db.getProjectActions(id)
+    .then(actions => {
+      res
+        .status(200)
+        .json(actions);
+    })
+    .catch(error => {
+      res 
+        .status(500)
+        .json({ error: "Error finding actions associated with that project ID..."})
+    })
+})
+
 router.post('/', (req, res) => {
   const project = req.body;
   if(project.name.length && project.description.length !== 0 ) {
