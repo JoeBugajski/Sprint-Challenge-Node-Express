@@ -100,4 +100,24 @@ router.put('/:id', (req, res) => {
   }
 })
 
+router.delete('/:id', (req, res) => {
+  db.remove(req.params.id)
+    .then(count => {
+      if (count) {
+      res
+        .status(200)
+        .json({message: `deleted ${count} action(s)`})
+      } else {
+        res
+          .status(404)
+          .json({ message: 'action not found...'})
+      }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: 'Error deleting that action...'})
+    })
+})
+
 module.exports = router;

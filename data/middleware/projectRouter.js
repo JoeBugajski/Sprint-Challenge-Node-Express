@@ -56,7 +56,8 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
-  if(changes.name.length || changes.description.length === 0) {
+  console.log(changes.name.length, changes.description.length);
+  if(changes.name.length == 0 || changes.description.length == 0) {
     res
       .status(406)
       .json({ errorMessage: "Name and description must not be blank!"})
@@ -83,7 +84,23 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  
+  db.remove(req.params.id)
+    .then(count => {
+      if (count) {
+      res
+        .status(200)
+        .json({ message: `deleted ${count} project(s)`})
+      } else {
+        res
+          .status(404)
+          .json({ message: 'project not found...'})
+      }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: 'Error deleting that project...'})
+    })
 })
 
 module.exports = router;
