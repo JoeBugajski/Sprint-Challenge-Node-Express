@@ -56,6 +56,30 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
+  if(changes.name && changes.description === "") {
+    res
+      .status(406)
+      .json({ errorMessage: "Name and description must not be blank!"})
+  } 
+  else {
+    db.update(id, changes)
+      .then(count => {
+        if (count) {
+          res
+            .status(200)
+            .json({ message: "Project updated"})
+        } else {
+          res
+            .status(404)
+            .json({ message: "Can't update a project that doesn't exist..."})
+        }
+      })
+      .catch(error => {
+        res
+          .status(500)
+          .json({ error: "Error updating project..."})
+      })
+  }
 })
 
 module.exports = router;

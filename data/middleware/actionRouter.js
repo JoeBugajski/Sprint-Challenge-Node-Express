@@ -35,14 +35,6 @@ router.get('/:id', (req, res) => {
 router.post('/', async (req, res) => {
   const action = req.body;
   const projId = action.project_id;
-  // const associateProject = await projectDb.get(projId);
-  // console.log(associateProject);
-  // console.log(projectDb.get());
-  // if (!associateProject) {
-  //   res
-  //     .status(404)
-  //     .json({ message: "The project ID associated with this action does not exist..." })
-  // } 
   if ((action.description.length > 128 || action.description.length === 0) || typeof(action.description) !== 'string') {
     res 
       .status(406)
