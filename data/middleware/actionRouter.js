@@ -66,4 +66,38 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.put('/:id', (req, res) => {
+  const id = req.params.id;
+  const changes = req.body;
+  if ((changes.description.length > 128 || changes.description.length === 0) || typeof(changes.description) !== 'string') {
+    res 
+      .status(406)
+      .json({ message: `Please make sure the action description is less than 128 characters, \nand greater than zero characters` })
+  }
+  else if (changes.notes.length === 0 || typeof(changes.notes) !== 'string') {
+    res
+      .status(406)
+      .json({ message: "Please make sure the length of the 'notes' section is greater than zero characters"})
+  }
+  else {
+    db.update(id, changes)
+      .then(count => {
+        if (count) {
+          res
+            .status(200)
+            .json({ message: "Action updated"})
+        } else {
+          res
+            .status(404)
+            .json({ message: "Can't update an action that doesn't exist..."})
+        }
+      })
+      .catch(error => {
+        res
+          .status(500)
+          .json({ error: "Error updating action..."})
+      })
+  }
+})
+
 module.exports = router;

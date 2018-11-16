@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const project = req.body;
-  if(project.name && project.description !== "") {
+  if(project.name.length && project.description.length !== 0 ) {
     db.insert(project)
       .then(project => {
         res
@@ -56,7 +56,7 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
-  if(changes.name && changes.description === "") {
+  if(changes.name.length || changes.description.length === 0) {
     res
       .status(406)
       .json({ errorMessage: "Name and description must not be blank!"})
@@ -80,6 +80,10 @@ router.put('/:id', (req, res) => {
           .json({ error: "Error updating project..."})
       })
   }
+})
+
+router.delete('/:id', (req, res) => {
+  
 })
 
 module.exports = router;
