@@ -35,9 +35,14 @@ router.get('/:id/actions', (req, res) => {
   const id = req.params.id;
   db.getProjectActions(id)
     .then(actions => {
-      res
-        .status(200)
-        .json(actions);
+      if (actions.length == 0) {
+        res
+          .status(404)
+          .json({ message: "That project ID number isn't associated with any actions. \nAre you sure that project exists?"})
+      }
+        res
+          .status(200)
+          .json(actions);
     })
     .catch(error => {
       res 
