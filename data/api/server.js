@@ -1,7 +1,10 @@
+const cors = require('cors');
 const express = require('express');
-const configMiddleware = require('../middleware/middleware')
-
+const configMiddleware = require('../middleware/middleware');
 const start = express();
+
+start.use(cors());
+start.options('*', cors());
 
 configMiddleware(start);
 
